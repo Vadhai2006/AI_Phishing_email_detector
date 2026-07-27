@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>AI Phishing Email Detector</title>
+
+    <meta name="description"
+          content="AI Powered Phishing Email Detection System using Machine Learning and Cyber Security">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+    <script src="https://kit.fontawesome.com/6d8d9c0b21.js"
+            crossorigin="anonymous"></script>
+
+</head>
+
+<body>
+
+<div class="background"></div>
+
+<div class="overlay"></div>
+
+<div class="container">
+
+<!-- =========================================
+                HEADER
+========================================= -->
+
+<header>
+
+    <div class="logo">
+
+        <i class="fa-solid fa-shield-halved"></i>
+
+        <h1>AI Phishing Email Detector</h1>
+
+    </div>
+
+    <p>
+
+        Detect phishing emails using Artificial Intelligence,
+        Machine Learning and Cyber Security Analysis.
+
+    </p>
+
+    <div class="top-buttons">
+
+        <a href="/">
+
+            <button
+                type="button"
+                class="nav-btn">
+
+                <i class="fa-solid fa-house"></i>
+
+                Home
+
+            </button>
+
+        </a>
+
+        <a href="/history">
+
+            <button
+                type="button"
+                class="nav-btn">
+
+                <i class="fa-solid fa-clock-rotate-left"></i>
+
+                Scan History
+
+            </button>
+
+        </a>
+
+    </div>
+
+</header>
+
+<!-- =========================================
+            EMAIL INPUT
+========================================= -->
+
+<section class="input-section">
+
+    <form
+        action="/predict"
+        method="POST"
+        autocomplete="off">
+
+        <textarea
+
+            name="email"
+
+            placeholder="Paste suspicious email here..."
+            spellcheck="false"
+            autocomplete="off"
+
+            required>{% if email %}{{ email }}{% endif %}</textarea>
+
+        {% if error %}
+
+        <div class="error-box">
+
+            <i class="fa-solid fa-circle-exclamation"></i>
+
+            {{ error }}
+
+        </div>
+
+        {% endif %}
+
+        <button type="submit">
+
+            <i class="fa-solid fa-magnifying-glass"></i>
+
+            Analyze Email
+
+        </button>
+
+    </form>
+
+</section>
+
+{% if prediction is not none %}
+
+<section class="result-section">
+    <!-- =========================================
+            PREDICTION CARD
+========================================= -->
+
+<div class="result-card">
+
+    <h2>
+
+        <i class="fa-solid fa-shield-virus"></i>
+
+        Prediction
+
+    </h2>
+
+    {% if prediction == 1 %}
+
+    <div class="danger">
+
+        🚨 Phishing Email Detected
+
+    </div>
+
+    {% else %}
+
+    <div class="safe">
+
+        ✅ Legitimate Email
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+<!-- =========================================
+            CONFIDENCE
+========================================= -->
+
+<div class="result-card">
+
+    <h2>
+
+        <i class="fa-solid fa-chart-line"></i>
+
+        Confidence
+
+    </h2>
+
+    <div class="progress">
+
+        <div
+            class="progress-bar"
+            style="width: {{ confidence}}%;">
+
+            {{ confidence }}%
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- =========================================
+            RISK LEVEL
+========================================= -->
+
+<div class="result-card">
+
+    <h2>
+
+        <i class="fa-solid fa-triangle-exclamation"></i>
+
+        Risk Level
+
+    </h2>
+
+    {% if level == "Critical" %}
+
+    <div class="risk danger">
+
+        🔴 Critical
+
+    </div>
+
+    {% elif level == "High" %}
+
+    <div class="risk high">
+
+        🟠 High
+
+    </div>
+
+    {% elif level == "Medium" %}
+
+    <div class="risk medium">
+
+        🟡 Medium
+
+    </div>
+
+    {% else %}
+
+    <div class="risk low">
+
+        🟢 Low
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+<!-- =========================================
+            THREAT SCORE
+========================================= -->
+
+<div class="result-card">
+
+    <h2>
+
+        <i class="fa-solid fa-gauge-high"></i>
+
+        Threat Score
+
+    </h2>
+
+    <div class="threat-score">
+
+        {{ score }}/100
+
+    </div>
+
+    <div class="score-message">
+
+        {% if score >= 80 %}
+
+            Extremely Dangerous Email.
+
+        {% elif score >= 60 %}
+
+            High Possibility of Phishing.
+
+        {% elif score >= 40 %}
+
+            Suspicious Email.
+
+        {% else %}
+
+            Looks Safe.
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+<!-- =========================================
+            URLs FOUND
+========================================= -->
+
+<div class="result-card">
+
+    <h2>
+
+        <i class="fa-solid fa-link"></i>
+
+        URLs Found
+
+    </h2>
+
+    {% if urls %}
+
+    <ul class="url-list">
+
+        {% for url in urls %}
+
+        <li>
+
+            <i class="fa-solid fa-globe"></i>
+
+            {{ url }}
+
+        </li>
+
+        {% endfor %}
+
+    </ul>
+
+    {% else %}
+
+    <p class="empty">
+
+        No URLs Found
+
+    </p>
+
+    {% endif %}
+
+</div>
+
+<!-- =========================================
+            SUSPICIOUS KEYWORDS
+========================================= -->
+
+<div class="result-card">
+
+    <h2>
+
+        <i class="fa-solid fa-bug"></i>
+
+        Suspicious Keywords
+
+    </h2>
+
+    {% if keywords %}
+
+    <div class="keyword-box">
+
+        {% for word in keywords %}
+
+        <span class="keyword">
+
+            {{ word }}
+
+        </span>
+
+        {% endfor %}
+
+    </div>
+
+    {% else %}
+
+    <p class="empty">
+
+        No Suspicious Keywords Detected
+
+    </p>
+
+    {% endif %}
+
+</div>
+<!-- =========================================
+            AI ANALYSIS REPORT
+========================================= -->
+
+<div class="result-card explanation">
+
+    <h2>
+
+        <i class="fa-solid fa-brain"></i>
+
+        AI Analysis Report
+
+    </h2>
+
+    {% if prediction == 1 %}
+
+    <ul>
+
+        <li>
+            Email content matches common phishing patterns.
+        </li>
+
+        <li>
+            Machine Learning model classified this email as phishing.
+        </li>
+
+        <li>
+            {{ keywords|length }} suspicious keyword(s) detected.
+        </li>
+
+        <li>
+            {{ urls|length }} URL(s) detected inside the email.
+        </li>
+
+        <li>
+            This email may attempt to steal credentials or
+            personal information.
+        </li>
+
+        <li>
+            Avoid clicking links or downloading attachments.
+        </li>
+
+        <li>
+            Verify the sender before taking any action.
+        </li>
+
+    </ul>
+
+    {% else %}
+
+    <ul>
+
+        <li>
+            The email appears to be legitimate.
+        </li>
+
+        <li>
+            No strong phishing indicators were detected.
+        </li>
+
+        <li>
+            Very few suspicious keywords were found.
+        </li>
+
+        <li>
+            No dangerous behavior detected by the AI model.
+        </li>
+
+        <li>
+            Still verify unknown senders before sharing
+            sensitive information.
+        </li>
+
+    </ul>
+
+    {% endif %}
+
+</div>
+
+<!-- =========================================
+            EMAIL STATISTICS
+========================================= -->
+
+<div class="result-card">
+
+    <h2>
+
+        <i class="fa-solid fa-chart-pie"></i>
+
+        Email Statistics
+
+    </h2>
+
+    <div class="stats-grid">
+
+        <div class="stat-card">
+
+            <h3>{{ urls|length }}</h3>
+
+            <p>URLs Found</p>
+
+        </div>
+
+        <div class="stat-card">
+
+            <h3>{{ keywords|length }}</h3>
+
+            <p>Keywords</p>
+
+        </div>
+
+        <div class="stat-card">
+
+            <h3>{{ confidence }}%</h3>
+
+            <p>Confidence</p>
+
+        </div>
+
+        <div class="stat-card">
+
+            <h3>{{ score }}</h3>
+
+            <p>Threat Score</p>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- =========================================
+            CYBER SECURITY TIPS
+========================================= -->
+
+<div class="tips">
+
+    <h2>
+
+        <i class="fa-solid fa-user-shield"></i>
+
+        Cyber Security Tips
+
+    </h2>
+
+    <div class="tip-grid">
+
+        <div class="tip">
+            🔐 Never share passwords or OTPs.
+        </div>
+
+        <div class="tip">
+            🌍 Verify website URLs carefully.
+        </div>
+
+        <div class="tip">
+            📧 Don't trust urgent emails blindly.
+        </div>
+
+        <div class="tip">
+            🛡 Enable Multi-Factor Authentication.
+        </div>
+
+        <div class="tip">
+            📎 Avoid unknown attachments.
+        </div>
+
+        <div class="tip">
+            🔄 Keep your browser updated.
+        </div>
+
+        <div class="tip">
+            🚫 Never click suspicious links.
+        </div>
+
+        <div class="tip">
+            📨 Verify sender email address.
+        </div>
+
+    </div>
+
+</div>
+
+<!-- =========================================
+            SECURITY RECOMMENDATION
+========================================= -->
+
+<div class="result-card">
+
+    <h2>
+
+        <i class="fa-solid fa-shield-heart"></i>
+
+        Final Recommendation
+
+    </h2>
+
+    {% if prediction == 1 %}
+
+    <p class="danger-text">
+
+        This email is highly suspicious.
+        Do not click links, do not download attachments,
+        and verify the sender before taking any action.
+
+    </p>
+
+    {% else %}
+
+    <p class="safe-text">
+
+        This email appears safe based on the AI model.
+        However, always verify unknown senders before
+        sharing personal or financial information.
+
+    </p>
+
+    {% endif %}
+
+</div>
+<!-- =========================================
+            QUICK ACTIONS
+========================================= -->
+
+<div class="result-card">
+
+    <h2>
+
+        <i class="fa-solid fa-bolt"></i>
+
+        Quick Actions
+
+    </h2>
+
+    <div class="action-buttons">
+
+        <a href="/">
+
+            <button
+                type="button"
+                class="secondary-btn">
+
+                <i class="fa-solid fa-rotate-right"></i>
+
+                Analyze Another Email
+
+            </button>
+
+        </a>
+
+        <a href="/history">
+
+            <button
+                type="button"
+                class="secondary-btn">
+
+                <i class="fa-solid fa-clock-rotate-left"></i>
+
+                View Scan History
+
+            </button>
+
+        </a>
+
+        <a href="/report">
+
+            <button
+                type="button"
+                class="secondary-btn">
+
+                <i class="fa-solid fa-file-lines"></i>
+
+                View Report
+
+            </button>
+
+        </a>
+
+        <button
+            type="button"
+            class="secondary-btn"
+            onclick="window.print(); return false;">
+
+            <i class="fa-solid fa-print"></i>
+
+            Print Result
+
+        </button>
+
+    </div>
+
+</div>
+
+</section>
+
+{% endif %}
+
+<!-- =========================================
+                FOOTER
+========================================= -->
+
+<footer>
+
+    <div class="footer-content">
+
+        <h3>
+
+            <i class="fa-solid fa-shield-halved"></i>
+
+            AI Phishing Email Detector
+
+        </h3>
+
+        <p>
+
+            AI Powered Cyber Security Email Analysis System
+
+        </p>
+
+        <div class="footer-tech">
+
+            <span>Python</span>
+
+            <span>Flask</span>
+
+            <span>Machine Learning</span>
+
+            <span>Scikit-Learn</span>
+
+            <span>SQLite</span>
+
+        </div>
+
+        <p class="copyright">
+
+            © 2026 AI Phishing Email Detector
+
+            <br>
+
+            Developed for Educational & Cyber Security Research Purposes
+
+        </p>
+
+    </div>
+
+</footer>
+
+</div>
+
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+</body>
+
+</html>

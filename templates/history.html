@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Detection History | AI Phishing Email Detector</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+</head>
+
+<body>
+
+<div class="background"></div>
+
+<div class="overlay"></div>
+
+<div class="container">
+
+<header>
+
+    <div class="logo">
+
+        <i class="fa-solid fa-shield-halved"></i>
+
+        <h1>Detection History</h1>
+
+    </div>
+
+    <p>
+
+        View all previously analyzed emails along with prediction,
+        confidence score, threat level and analysis date.
+
+    </p>
+
+    <div class="top-buttons">
+
+        <a href="/">
+
+            <button class="nav-btn">
+
+                <i class="fa-solid fa-house"></i>
+
+                Home
+
+            </button>
+
+        </a>
+
+        <a href="/report">
+
+            <button class="nav-btn">
+
+                <i class="fa-solid fa-chart-column"></i>
+
+                Report
+
+            </button>
+
+        </a>
+
+    </div>
+
+</header>
+
+<section class="result-section">
+
+<div class="result-card">
+
+<h2>
+
+<i class="fa-solid fa-clock-rotate-left"></i>
+
+Detection History
+
+</h2>
+
+{% if history %}
+
+<div class="history-table">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>#</th>
+
+<th>Email</th>
+
+<th>Prediction</th>
+
+<th>Confidence</th>
+
+<th>Threat</th>
+
+<th>Date</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+    {% for row in history %}
+
+<tr>
+
+<td>{{ loop.index }}</td>
+
+<td>
+
+<div style="max-width:350px; word-break:break-word;">
+
+{{ row.email }}
+
+</div>
+
+</td>
+
+<td>
+
+{% if row.prediction == "Phishing" %}
+
+<span class="danger">
+
+<i class="fa-solid fa-triangle-exclamation"></i>
+
+Phishing
+
+</span>
+
+{% else %}
+
+<span class="safe">
+
+<i class="fa-solid fa-circle-check"></i>
+
+Safe
+
+</span>
+
+{% endif %}
+
+</td>
+
+<td>
+
+<div class="progress">
+
+<div class="progress-bar"
+
+style="width:{{ row.confidence }}%;">
+
+{{ row.confidence }}%
+
+</div>
+
+</div>
+
+</td>
+
+<td>
+
+{% if row.threat_score >= 75 %}
+
+<div class="risk danger">
+
+High
+
+</div>
+
+{% elif row.threat_score >= 50 %}
+
+<div class="risk high">
+
+Medium
+
+</div>
+
+{% elif row.threat_score >= 25 %}
+
+<div class="risk medium">
+
+Low
+
+</div>
+
+{% else %}
+
+<div class="risk low">
+
+Very Safe
+
+</div>
+
+{% endif %}
+
+</td>
+
+<td>
+
+{{ row.created_at }}
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+</div>
+
+{% else %}
+
+<div class="empty-history">
+
+<i class="fa-solid fa-folder-open"></i>
+
+<h2>
+
+No Analysis Found
+
+</h2>
+
+<p>
+
+Analyze an email to build your detection history.
+
+</p>
+
+<a href="/">
+
+<button class="nav-btn">
+
+Analyze Email
+
+</button>
+
+</a>
+
+</div>
+
+{% endif %}
+
+</div>
+
+<div class="tips">
+
+    <h2>
+
+        <i class="fa-solid fa-chart-line"></i>
+
+        History Summary
+
+    </h2>
+
+    <div class="stats-grid">
+
+        <div class="stat-card">
+
+            <h3>{{ history|length }}</h3>
+
+            <p>Total Analyses</p>
+
+        </div>
+
+        <div class="stat-card">
+
+            <h3>{{ history | selectattr("prediction","equalto","Phishing") | list | length }}</h3>
+
+            <p>Phishing Emails</p>
+
+        </div>
+
+        <div class="stat-card">
+
+            <h3>{{ history | selectattr("prediction","equalto","Safe") | list | length }}</h3>
+
+            <p>Safe Emails</p>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="action-buttons mt-30">
+
+    <a href="/">
+
+        <button class="secondary-btn">
+
+            <i class="fa-solid fa-house"></i>
+
+            Home
+
+        </button>
+
+    </a>
+
+    <a href="/report">
+
+        <button class="secondary-btn">
+
+            <i class="fa-solid fa-chart-column"></i>
+
+            Analytics Report
+
+        </button>
+
+    </a>
+
+    <button
+        class="secondary-btn"
+        onclick="window.print()">
+
+        <i class="fa-solid fa-print"></i>
+
+        Print History
+
+    </button>
+
+</div>
+
+</section>
+
+<footer>
+
+    <div class="footer-content">
+
+        <h3>
+
+            <i class="fa-solid fa-shield-halved"></i>
+
+            AI Phishing Email Detector
+
+        </h3>
+
+        <p>
+
+            Analyze suspicious emails, monitor previous detections,
+            and improve cybersecurity awareness.
+
+        </p>
+
+        <div class="footer-tech">
+
+            <span>Python</span>
+
+            <span>Flask</span>
+
+            <span>Machine Learning</span>
+
+            <span>Scikit-learn</span>
+
+            <span>SQLite</span>
+
+        </div>
+
+        <p class="copyright">
+
+            © <span class="current-year"></span>
+            AI Phishing Email Detector.
+            All Rights Reserved.
+
+        </p>
+
+    </div>
+
+</footer>
+
+</div>
+
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+</body>
+
+</html>

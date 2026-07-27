@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Analytics Report | AI Phishing Email Detector</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+</head>
+
+<body>
+
+<div class="background"></div>
+
+<div class="overlay"></div>
+
+<div class="container">
+
+<header>
+
+    <div class="logo">
+
+        <i class="fa-solid fa-chart-line"></i>
+
+        <h1>Analytics Report</h1>
+
+    </div>
+
+    <p>
+
+        Monitor phishing detection statistics, security insights,
+        and machine learning prediction performance.
+
+    </p>
+
+    <div class="top-buttons">
+
+        <a href="/">
+
+            <button class="nav-btn">
+
+                <i class="fa-solid fa-house"></i>
+
+                Home
+
+            </button>
+
+        </a>
+
+        <a href="/history">
+
+            <button class="nav-btn">
+
+                <i class="fa-solid fa-clock-rotate-left"></i>
+
+                History
+
+            </button>
+
+        </a>
+
+    </div>
+
+</header>
+
+<section class="result-section">
+
+<div class="result-card">
+
+<h2>
+
+<i class="fa-solid fa-chart-pie"></i>
+
+Overall Statistics
+
+</h2>
+
+<div class="stats-grid">
+
+<div class="stat-card">
+
+<h3>{{ total_emails }}</h3>
+
+<p>Total Emails</p>
+
+</div>
+
+<div class="stat-card">
+
+<h3>{{ phishing_count }}</h3>
+
+<p>Phishing Detected</p>
+
+</div>
+
+<div class="stat-card">
+
+<h3>{{ safe_count }}</h3>
+
+<p>Safe Emails</p>
+
+</div>
+
+<div class="stat-card">
+
+<h3>{{ avg_confidence }}%</h3>
+
+<p>Average Confidence</p>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="result-card">
+
+<h2>
+
+<i class="fa-solid fa-gauge-high"></i>
+
+Detection Accuracy
+
+</h2>
+
+<div class="progress">
+
+<div class="progress-bar"
+
+style="width:{{ avg_confidence }}%;">
+
+{{ avg_confidence }}%
+
+</div>
+
+</div>
+
+<p class="score-message">
+
+Average confidence of predictions generated
+by the trained Machine Learning model.
+
+</p>
+
+</div>
+
+<div class="result-card">
+
+<h2>
+
+<i class="fa-solid fa-shield-virus"></i>
+
+Threat Distribution
+
+</h2>
+
+<div class="stats-grid">
+
+<div class="stat-card">
+
+<h3>{{ phishing_percentage }}%</h3>
+
+<p>Phishing Rate</p>
+
+</div>
+
+<div class="stat-card">
+
+<h3>{{ safe_percentage }}%</h3>
+
+<p>Safe Rate</p>
+
+</div>
+
+<div class="stat-card">
+
+<h3>{{ highest_confidence }}%</h3>
+
+<p>Highest Confidence</p>
+
+</div>
+
+<div class="stat-card">
+
+<h3>{{ lowest_confidence }}%</h3>
+
+<p>Lowest Confidence</p>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="result-card">
+
+<h2>
+
+<i class="fa-solid fa-robot"></i>
+
+AI Model Information
+
+</h2>
+
+<ul class="url-list">
+
+<li>
+
+<i class="fa-solid fa-brain"></i>
+
+Machine Learning Algorithm :
+<strong>&nbsp;Logistic Regression</strong>
+
+</li>
+
+<li>
+
+<i class="fa-solid fa-filter"></i>
+
+Feature Extraction :
+<strong>&nbsp;TF-IDF Vectorizer</strong>
+
+</li>
+
+<li>
+
+<i class="fa-solid fa-database"></i>
+
+Training Dataset :
+<strong>&nbsp;Phishing Email Dataset</strong>
+
+</li>
+
+<li>
+
+<i class="fa-solid fa-microchip"></i>
+
+Framework :
+<strong>&nbsp;Scikit-Learn</strong>
+
+</li>
+
+<li>
+
+<i class="fa-solid fa-code"></i>
+
+Backend :
+<strong>&nbsp;Python + Flask</strong>
+
+</li>
+
+</ul>
+
+</div>
+
+<div class="tips">
+
+<h2>
+
+<i class="fa-solid fa-lightbulb"></i>
+
+Cyber Security Recommendations
+
+</h2>
+
+<div class="tip-grid">
+
+<div class="tip">
+
+<strong>Verify Sender</strong>
+
+<p>
+
+Always verify the sender's email address before
+opening attachments or clicking links.
+
+</p>
+
+</div>
+
+<div class="tip">
+
+<strong>Don't Click Unknown Links</strong>
+
+<p>
+
+Hover over every link before opening it and
+avoid shortened URLs.
+
+</p>
+
+</div>
+
+<div class="tip">
+
+<strong>Enable MFA</strong>
+
+<p>
+
+Protect your important accounts using
+Multi-Factor Authentication.
+
+</p>
+
+</div>
+
+<div class="tip">
+
+<strong>Keep Software Updated</strong>
+
+<p>
+
+Install security updates regularly to stay
+protected from vulnerabilities.
+
+</p>
+
+</div>
+
+<div class="tip">
+
+<strong>Report Suspicious Emails</strong>
+
+<p>
+
+Report phishing emails immediately to your
+organization or email provider.
+
+</p>
+
+</div>
+
+<div class="tip">
+
+<strong>Never Share Credentials</strong>
+
+<p>
+
+Banks and trusted companies never ask for
+passwords through email.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="result-card">
+
+    <h2>
+
+        <i class="fa-solid fa-file-circle-check"></i>
+
+        Report Summary
+
+    </h2>
+
+    {% if phishing_count > safe_count %}
+
+    <p class="danger-text recommendation-text">
+
+        The analysis history indicates that a significant number of
+        suspicious emails have been detected. Users should remain alert,
+        verify unknown senders, avoid clicking suspicious links, and never
+        share sensitive information through email.
+
+    </p>
+
+    {% else %}
+
+    <p class="safe-text recommendation-text">
+
+        Most analyzed emails were identified as safe. Continue following
+        cybersecurity best practices and remain cautious while opening
+        unexpected emails or attachments.
+
+    </p>
+
+    {% endif %}
+
+</div>
+
+<div class="action-buttons mt-30">
+
+    <a href="/">
+
+        <button class="secondary-btn">
+
+            <i class="fa-solid fa-house"></i>
+
+            Home
+
+        </button>
+
+    </a>
+
+    <a href="/history">
+
+        <button class="secondary-btn">
+
+            <i class="fa-solid fa-clock-rotate-left"></i>
+
+            History
+
+        </button>
+
+    </a>
+
+    <button
+        class="secondary-btn"
+        onclick="window.print()">
+
+        <i class="fa-solid fa-print"></i>
+
+        Print Report
+
+    </button>
+
+</div>
+
+</section>
+
+<footer>
+
+    <div class="footer-content">
+
+        <h3>
+
+            <i class="fa-solid fa-shield-halved"></i>
+
+            AI Phishing Email Detector
+
+        </h3>
+
+        <p>
+
+            A Machine Learning based cybersecurity solution that helps
+            identify phishing emails using Natural Language Processing,
+            TF-IDF feature extraction, and Logistic Regression.
+
+        </p>
+
+        <div class="footer-tech">
+
+            <span>Python</span>
+
+            <span>Flask</span>
+
+            <span>Scikit-Learn</span>
+
+            <span>SQLite</span>
+
+            <span>HTML</span>
+
+            <span>CSS</span>
+
+            <span>JavaScript</span>
+
+        </div>
+
+        <p class="copyright">
+
+            © <span class="current-year"></span>
+            AI Phishing Email Detector.
+            All Rights Reserved.
+
+        </p>
+
+    </div>
+
+</footer>
+
+</div>
+
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+</body>
+
+</html>
